@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+    <RootNamespace>TfmStudio.Core</RootNamespace>
+    <Description>Phased-array ultrasonic (PAUT) / full matrix capture (FMC) simulation and imaging: TFM, S-scan, gates, sizing.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TfmStudio.Core.Tests" />
+    <InternalsVisibleTo Include="TfmStudio.Benchmarks" />
+  </ItemGroup>
+
+</Project>

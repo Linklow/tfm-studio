@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>TfmStudio.App</RootNamespace>
+    <AssemblyName>TfmStudio</AssemblyName>
+    <!-- WPF Fluent theme (Application.ThemeMode) is marked experimental. -->
+    <!-- SkiaSharp.Views.WPF (used by ScottPlot.WPF) only ships a .NET Framework TFM; it runs fine on .NET. -->
+    <NoWarn>$(NoWarn);WPF0001;NU1701</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TfmStudio.Core\TfmStudio.Core.csproj" />
+    <ProjectReference Include="..\TfmStudio.Plotting\TfmStudio.Plotting.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="ScottPlot.WPF" Version="5.1.59" />
+  </ItemGroup>
+
+</Project>

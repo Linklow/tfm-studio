@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/bench/">
+    <Project Path="bench/TfmStudio.Benchmarks/TfmStudio.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/TfmStudio.App/TfmStudio.App.csproj" />
+    <Project Path="src/TfmStudio.Cli/TfmStudio.Cli.csproj" />
+    <Project Path="src/TfmStudio.Core/TfmStudio.Core.csproj" />
+    <Project Path="src/TfmStudio.Plotting/TfmStudio.Plotting.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TfmStudio.Core.Tests/TfmStudio.Core.Tests.csproj" />
+  </Folder>
+</Solution>

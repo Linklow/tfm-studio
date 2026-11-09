@@ -1,0 +1,105 @@
+﻿<Window x:Class="TfmStudio.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sp="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
+        xmlns:vm="clr-namespace:TfmStudio.App.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        Title="TFM Studio: phased-array UT / TFM workstation"
+        Width="1640" Height="980" Background="{StaticResource PageBrush}">
+    <DockPanel>
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource HairlineBrush}" BorderThickness="0,1,0,0" Padding="10,5">
+            <TextBlock Text="{Binding Status}" FontFamily="Consolas" Foreground="{StaticResource Ink2Brush}" TextTrimming="CharacterEllipsis" />
+        </Border>
+
+        <ScrollViewer DockPanel.Dock="Left" Width="310" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="14,10,10,10">
+                <TextBlock Text="TFM Studio" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}" />
+                <TextBlock Text="{Binding SpecimenDescription}" TextWrapping="Wrap" Foreground="{StaticResource Ink2Brush}" Margin="0,2,0,0" />
+
+                <TextBlock Text="Scan" Style="{StaticResource SectionHeader}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Start scan" Command="{Binding StartCommand}" Width="130" Margin="0,0,8,0" />
+                    <Button Content="Stop" Command="{Binding StopCommand}" Width="90" />
+                </StackPanel>
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="120" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                    <TextBlock Text="Encoder speed" Style="{StaticResource Label}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Speeds}" SelectedItem="{Binding ScanSpeedMmPerS}" IsEnabled="{Binding IsIdle}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="{Binding StringFormat={}{0} mm/s}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding}" Value="0">
+                                                    <Setter Property="Text" Value="As fast as possible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Grid.Row="1" Text="Probe" Style="{StaticResource Label}" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,4,0,0" ItemsSource="{Binding Probes}" SelectedIndex="{Binding ProbeIndex}" IsEnabled="{Binding IsIdle}" />
+                    <TextBlock Grid.Row="2" Text="Position" Style="{StaticResource Label}" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource Readout}" VerticalAlignment="Center"
+                               Text="{Binding PositionMm, StringFormat=y \= {0:F0} mm}" />
+                </Grid>
+
+                <TextBlock Text="Imaging" Style="{StaticResource SectionHeader}" />
+                <CheckBox Content="TFM (total focusing method)" IsChecked="{Binding ShowTfm}" />
+                <CheckBox Content="Phased-array S-scan (-45° to 45°)" IsChecked="{Binding ShowSectorScan}" Margin="0,4,0,0" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding FocalDepthMm, StringFormat=S-scan focal sound path: {0:F0} mm}" />
+                <Slider Minimum="5" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding FocalDepthMm}" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding DynamicRangeDb, StringFormat=Display dynamic range: {0:F0} dB}" />
+                <Slider Minimum="20" Maximum="60" TickFrequency="2" IsSnapToTickEnabled="True" Value="{Binding DynamicRangeDb}" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding Velocity, StringFormat=Calibrated velocity: {0:F0} m/s}" />
+                <Slider Minimum="5600" Maximum="6200" TickFrequency="10" IsSnapToTickEnabled="True" Value="{Binding Velocity}" />
+                <Grid Margin="0,6,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="120" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                    <TextBlock Text="DAS kernel" Style="{StaticResource Label}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Kernels}" SelectedItem="{Binding Kernel}" />
+                </Grid>
+                <TextBlock Text="{Binding CpuInfo}" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0" />
+
+                <TextBlock Text="A-scan and gates" Style="{StaticResource SectionHeader}" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding AScanElement, StringFormat=Pulse-echo element: {0}}" />
+                <Slider Minimum="1" Maximum="{Binding ElementCount}" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding AScanElement}" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding GateAStartUs, StringFormat=Gate A start: {0:F1} µs}" />
+                <Slider Minimum="0.5" Maximum="10" TickFrequency="0.1" IsSnapToTickEnabled="True" Value="{Binding GateAStartUs}" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding GateAWidthUs, StringFormat=Gate A width: {0:F1} µs}" />
+                <Slider Minimum="0.5" Maximum="8" TickFrequency="0.1" IsSnapToTickEnabled="True" Value="{Binding GateAWidthUs}" />
+                <TextBlock Style="{StaticResource Label}" Text="{Binding GateThresholdPct, StringFormat=Gate threshold: {0:F0} % FSH}" />
+                <Slider Minimum="5" Maximum="80" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding GateThresholdPct}" />
+                <TextBlock Text="{Binding GateAReadout}" Style="{StaticResource Readout}" Margin="0,6,0,0" />
+                <TextBlock Text="{Binding GateBReadout}" Style="{StaticResource Readout}" />
+
+                <TextBlock Text="Strongest indication" Style="{StaticResource SectionHeader}" />
+                <TextBlock Text="{Binding IndicationReadout}" Style="{StaticResource Readout}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.72*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.15*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Style="{StaticResource Card}"><sp:WpfPlot x:Name="TfmPlot" /></Border>
+            <Border Grid.Column="1" Style="{StaticResource Card}"><sp:WpfPlot x:Name="SectorPlot" /></Border>
+            <Border Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource Card}"><sp:WpfPlot x:Name="CScanPlot" /></Border>
+            <Border Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource Card}"><sp:WpfPlot x:Name="AScanPlot" /></Border>
+        </Grid>
+    </DockPanel>
+</Window>
