@@ -43,8 +43,16 @@ public partial class App : Application
     {
         var root = (FrameworkElement)window.Content;
         root.UpdateLayout();
-        var bitmap = new RenderTargetBitmap((int)root.ActualWidth, (int)root.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-        bitmap.Render(root);
+        int w = (int)root.ActualWidth, h = (int)root.ActualHeight;
+        // Compose on an opaque page colour: transparent pixels turn black in dark-mode viewers (GitHub dark theme).
+        var visual = new DrawingVisual();
+        using (var dc = visual.RenderOpen())
+        {
+            dc.DrawRectangle((Brush)window.FindResource("PageBrush"), null, new Rect(0, 0, w, h));
+            dc.DrawRectangle(new VisualBrush(root), null, new Rect(0, 0, w, h));
+        }
+        var bitmap = new RenderTargetBitmap(w, h, 96, 96, PixelFormats.Pbgra32);
+        bitmap.Render(visual);
         var encoder = new PngBitmapEncoder();
         encoder.Frames.Add(BitmapFrame.Create(bitmap));
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
