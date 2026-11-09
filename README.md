@@ -11,7 +11,7 @@ software reconstructs a TFM image and a conventional phased-array S-scan from th
 builds a C-scan, and gives the operator a flaw-detector A-scan with gates. Everything runs live:
 about 8 frames/s in the UI and 10 frames/s headless on a 6-core laptop.
 
-![TFM Studio](docs/gui.png)
+![TFM Studio](docs/main-window.png)
 
 *Frame at y = 160 mm. Two Ø1 mm side-drilled holes 1.5 mm apart: TFM (left) resolves them. The
 S-scan, with its focal law at 15 mm, smears them into one streak at 22 mm depth. The C-scan (right)
